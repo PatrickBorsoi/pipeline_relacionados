@@ -45,4 +45,3 @@ def show_data(planilha):
     dados = recebendo_dados.get_all_records()
     df_dados = pd.DataFrame(dados)
     return df_dados
-
