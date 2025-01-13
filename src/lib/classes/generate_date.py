@@ -41,7 +41,7 @@ class DatasAtualEAnterior:
         return self.data_atual.strftime('%d-%m-%Y')
     
     @property
-    def dia_anterior(self) -> str:
+    def data_anterior(self) -> str:
         dias_da_semana = self.data_atual.weekday()
         diferenca = timedelta(days=3) if dias_da_semana == 0 else timedelta(days=1)
         dia_anterior = self.data_atual - diferenca
