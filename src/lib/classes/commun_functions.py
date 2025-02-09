@@ -4,9 +4,9 @@ import re
 import pandas as pd
 
 def agendar_execucao_do_codigo(data_atual):
-    'Agendamento de tarefas, so iniciar depois da hora X'
+    ''''Agendamento de tarefas, so iniciar depois da hora X'''
     
-    agendamento_da_execucao = data_atual.replace(hour=4, minute=00, second=00, microsecond=0)
+    agendamento_da_execucao = data_atual.replace(hour=00, minute=1, second=00, microsecond=0)
     
     if data_atual >= agendamento_da_execucao:
         agendamento_da_execucao += timedelta(days=1)
@@ -14,9 +14,16 @@ def agendar_execucao_do_codigo(data_atual):
     segundos_restantes = (agendamento_da_execucao - data_atual).total_seconds()
 
     print(f'Aguardando {segundos_restantes} segundos para executar')
+    
     time.sleep(segundos_restantes)
 
 
+def leitura_database(path_database: str) -> pd.DataFrame:
+    database = pd.read_excel(path_database) 
+    return database
+
+def exportar_arquivo(df: pd.DataFrame ,path_destino: str):
+    df.to_excel(path_destino, index=False)
 
 
 def renomeando_id_obra_para_busca_na_api(obra) -> str:

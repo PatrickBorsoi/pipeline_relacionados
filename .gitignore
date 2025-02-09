@@ -2,3 +2,8 @@
 data
 prod-tabela-principal-7c876b1827b6.json
 .env
+__pycache__
+src/lib/classes/__pycache__
+database
+database/database_relacionado
+src/lib/classes/pipelines/progress_file.txt
