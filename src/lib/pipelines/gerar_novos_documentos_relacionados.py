@@ -83,7 +83,7 @@ def gerar_documentos_relacionados():
                     
                     resposta_xml_listar_andamentos = xml_listar_andamentos(id_unidade=id_unidade, relacionado=id_relacionado)
                     resposta_xml_colsultar_procedimento = xml_consultar_procedimento(id_unidade=id_unidade, id_obra=id_relacionado)
-                    if resposta_xml_listar_andamentos.status_code == 200 and resposta_xml_colsultar_procedimento == 200:
+                    if resposta_xml_listar_andamentos.status_code == 200 and resposta_xml_colsultar_procedimento.status_code == 200:
                         
                         unidade =True
 
@@ -93,7 +93,7 @@ def gerar_documentos_relacionados():
                         parsed_dict_consultar_procedimento = xmltodict.parse(xml_txt_consultar_procedimento)
 
                         parametros = parsed_dict['SOAP-ENV:Envelope']['SOAP-ENV:Body']['ns1:listarAndamentosResponse']['parametros']
-                        parametros_consultar_procedimento = parsed_dict_consultar_procedimento['SOAP-ENV:Envelope']['SOAP-ENV:Body']['ns1:listarAndamentosResponse']['parametros']
+                        # parametros_consultar_procedimento = parsed_dict_consultar_procedimento['SOAP-ENV:Envelope']['SOAP-ENV:Body']['ns1:listarAndamentosResponse']['parametros']
 
                         try:
                             itens:list = parametros['item']
