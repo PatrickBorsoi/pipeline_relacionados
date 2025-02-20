@@ -6,7 +6,7 @@ import pandas as pd
 def agendar_execucao_do_codigo(data_atual):
     ''''Agendamento de tarefas, so iniciar depois da hora X'''
     
-    agendamento_da_execucao = data_atual.replace(hour=00, minute=1, second=00, microsecond=0)
+    agendamento_da_execucao = data_atual.replace(hour=00, minute=2, second=00, microsecond=0)
     
     if data_atual >= agendamento_da_execucao:
         agendamento_da_execucao += timedelta(days=1)

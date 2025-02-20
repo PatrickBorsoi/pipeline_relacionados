@@ -119,6 +119,8 @@ QTD de processos que não existe relacionado: {len(set(lista_que_nao_existe_rela
     df_relacionados = pd.DataFrame(dicionario_gerar_novos_relacionados)
 
     path_file_relacionado_database = 'C:/Users/usuario/Desktop/workspace/00-database/id_relacionado'
-
     df_relacionados.to_excel(f'{path_file_relacionado_database}/01-database_relacionados_atual_teste.xlsx',index=False)
+    #
+    path_file_db_files = r'C:\Users\usuario\Desktop\workspace-patrick\db_files\table_files_relacionado\db_relacionados'
+    df_relacionados.to_excel(f'{path_file_db_files}/{data_atual_formatada}db_relacionados_atual.xlsx',index=False)
     df_relacionados.to_excel(fr'C:\Users\usuario\Desktop\workspace_patrick\02_pipeline_relacionado\database\sem_unidade.xlsx',index=False)
