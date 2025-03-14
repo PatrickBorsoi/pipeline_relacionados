@@ -47,7 +47,8 @@ def pipeline_gerar_novos_arquivos_relacionados():
     for index_obra, dados_obra in df_database_principal_sem_fase_transferido.iterrows():
         id_da_obra = dados_obra['Id Obra']
         processo_sei = renomeando_id_obra_para_busca_na_api(obra=id_da_obra)
-
+        if processo_sei == 'E-17/001/2972/2014':
+            continue
         if ultimo_id_processado and index_obra <= ultimo_id_processado:
             if len(processo_sei) -1 == ultimo_id_processado:
                 break
@@ -57,7 +58,7 @@ def pipeline_gerar_novos_arquivos_relacionados():
         for index_unidade, dados_unidade in unidades_seiop.iterrows():
             id_unidade = dados_unidade['ID_UNIDADE']
             resposta_do_xml_consultar_procedimento = xml_consultar_procedimento(id_obra=processo_sei, id_unidade=id_unidade)
-
+            
             if resposta_do_xml_consultar_procedimento.status_code == 200:
                 texto_xml_consultar_procedimento = resposta_do_xml_consultar_procedimento.text #Transformando o xml em texto
                     
