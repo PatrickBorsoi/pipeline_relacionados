@@ -21,3 +21,5 @@ while True:
         gerar_documentos_relacionados()
         comparativo_de_tabelas()
         inserir_linhas_tabela_relacionada(0)
+        #up
+        
