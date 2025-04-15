@@ -22,4 +22,4 @@ while True:
         comparativo_de_tabelas()
         inserir_linhas_tabela_relacionada(0)
         #up
-        
+        #subir
