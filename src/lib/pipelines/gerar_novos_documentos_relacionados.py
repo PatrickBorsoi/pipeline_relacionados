@@ -198,6 +198,7 @@ def comparativo_de_tabelas():
 
     # Caminho do documento completo do dia anterior 
     path_relacionado_do_dia_anterior = f'C:/Users/usuario\Desktop/workspace_patrick/00-database/id_relacionado_documento/lista_completa/{data_anterior_formatada}_ids_relacionados_lista_completa.xlsx'
+    # path_relacionado_do_dia_anterior = f'C:/Users/usuario\Desktop/workspace_patrick/00-database/id_relacionado_documento/lista_completa/17-04-2025_ids_relacionados_lista_completa.xlsx'
     # Leitura do documento completo o caminho e la na pasta onde esta todos os arquivos completos
     df_atual = leitura_database(path_database=path_relacionado_do_dia)
 
