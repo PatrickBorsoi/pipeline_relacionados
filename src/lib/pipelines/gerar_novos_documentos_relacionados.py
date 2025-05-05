@@ -20,7 +20,10 @@ data_anterior_formatada = datas.data_anterior
 
 
 def gerar_documentos_relacionados():
-    load_dotenv('.env')
+    PATH_ENV = r"C:\Users\usuario\Desktop\workspace\pipeline_relacionados\.env"
+    PATH_UNIDADES = r"C:\Users\usuario\Desktop\workspace\pipeline_relacionados\database\unidades_seiop.xlsx"
+    PATH_ARQUIVO_RELACIONADO = r"C:\Users\usuario\Desktop\workspace\pipeline_relacionados\database\database_documentos_relacionados"
+    load_dotenv(PATH_ENV)
 
     pasta_id = os.getenv('ID_PASTA')
     nome_arquivo = os.getenv('NOME_DO_ARQUIVO')
@@ -38,14 +41,13 @@ def gerar_documentos_relacionados():
     df_database_principal = show_data(planilha=database_principal)
     df_database_principal_sem_fase_transferido = df_database_principal[df_database_principal[' FASE'] != 'TRANSFERIDO']
 
-    path_unidades = r'C:\Users\usuario\Desktop\workspace_patrick\02_pipeline_relacionado\database\unidades_seiop.xlsx'
-    unidades_seiop = pd.read_excel(path_unidades)
+    unidades_seiop = pd.read_excel(PATH_UNIDADES)
     id_unidade_seiop = unidades_seiop['ID_UNIDADE']
 
-    path_database_relacionados = 'C:/Users/usuario/Desktop/workspace/00-database/id_relacionado/01-database_relacionados_atual_teste.xlsx'
+    path_database_relacionados = r'C:\Users\usuario\Desktop\workspace\pipeline_relacionados\database\database_relacionado\01-database_relacionados.xlsx'
     database_relacionados = pd.read_excel(path_database_relacionados)
 
-    progress_file = r'C:\Users\usuario\Desktop\workspace_patrick\02_pipeline_relacionado\src\lib\pipelines\progress_file.txt'
+    progress_file = r'C:\Users\usuario\Desktop\workspace\pipeline_relacionados\src\lib\pipelines\progress_file.txt'
     salvar_progresso(progress_file, None)
 
     lista_id_obra: list = []
@@ -65,6 +67,7 @@ def gerar_documentos_relacionados():
     ultimo_id_processado = ler_progresso(progress_file)
 
     for i, rows in database_relacionados.iterrows():
+        print('For database_relacionados')
         try:
             id_obra = rows['Id Obra']
             id_relacionado = rows['id_relacionado']
@@ -80,7 +83,7 @@ def gerar_documentos_relacionados():
 
                 for i_unidade, rows in unidades_seiop.iterrows():
                     id_unidade = rows['ID_UNIDADE']
-                    
+                    print('For Unidade')
                     resposta_xml_listar_andamentos = xml_listar_andamentos(id_unidade=id_unidade, relacionado=id_relacionado)
                     resposta_xml_colsultar_procedimento = xml_consultar_procedimento(id_unidade=id_unidade, id_obra=id_relacionado)
                     if resposta_xml_listar_andamentos.status_code == 200 and resposta_xml_colsultar_procedimento.status_code == 200:
@@ -165,12 +168,17 @@ def gerar_documentos_relacionados():
     df_relacionados['numero do documento'] = numero_do_documento
     df_relacionados['ano do id relacionado'] = ano_do_id_relacionado
     
-    path_database_documentos_relacionados = rf'C:\Users\usuario\Desktop\workspace_patrick\02_pipeline_relacionado\database\database_documentos_relacionados\{data_atual_formatada}-arquivos_relacionados.xlsx'
+    path_database_documentos_relacionados = rf'{PATH_ARQUIVO_RELACIONADO}\{data_atual_formatada}-arquivos_relacionados.xlsx'
     exportar_arquivo(df=df_relacionados, path_destino=path_database_documentos_relacionados) # exportando o data frame para a pasta
 
 
 def comparativo_de_tabelas():
-    load_dotenv('.env')
+    PATH_ENV = r"C:\Users\usuario\Desktop\workspace\pipeline_relacionados\.env"
+    PATH_DATABASE_DOCUMENTOS_RELACIONADOS = r"C:\Users\usuario\Desktop\workspace\pipeline_relacionados\database\database_documentos_relacionados"
+    PATH_LISTA_COMPLETA_DOCUMENTO_RELACIONADO = r"C:\Users\usuario\Desktop\workspace\db_files\db_id_relacionado\Lista_completa_relacionados"
+    
+    
+    load_dotenv(PATH_ENV)
 
     pasta_id = os.getenv('ID_PASTA')
     nome_arquivo = os.getenv('NOME_DO_ARQUIVO')
@@ -189,38 +197,38 @@ def comparativo_de_tabelas():
     df_database_principal_sem_fase_transferido = df_database_principal[df_database_principal[' FASE'] != 'TRANSFERIDO']
     
     # Caminho do documento completo do dia atual da pasta desse arquivo
-    path_database_documentos_relacionados = rf'C:\Users\usuario\Desktop\workspace_patrick\02_pipeline_relacionado\database\database_documentos_relacionados\{data_atual_formatada}-arquivos_relacionados.xlsx'
+    path_database_documentos_relacionados = rf'{PATH_DATABASE_DOCUMENTOS_RELACIONADOS}\{data_atual_formatada}-arquivos_relacionados.xlsx'
     df_relacionado_do_dia = leitura_database(path_database=path_database_documentos_relacionados)
 
     # Enviar o df_relacionado do dia para esse caminho onde estao todos as listas de relacionados 
-    path_relacionado_do_dia = f'C:/Users/usuario\Desktop/workspace_patrick/00-database/id_relacionado_documento/lista_completa/{data_atual_formatada}_ids_relacionados_lista_completa.xlsx'
+    path_relacionado_do_dia = f'{PATH_LISTA_COMPLETA_DOCUMENTO_RELACIONADO}/{data_atual_formatada}_ids_relacionados_lista_completa.xlsx'
     exportar_arquivo(df=df_relacionado_do_dia, path_destino=path_relacionado_do_dia)
 
     # Caminho do documento completo do dia anterior 
-    path_relacionado_do_dia_anterior = f'C:/Users/usuario\Desktop/workspace_patrick/00-database/id_relacionado_documento/lista_completa/{data_anterior_formatada}_ids_relacionados_lista_completa.xlsx'
+    path_relacionado_do_dia_anterior = f'{PATH_LISTA_COMPLETA_DOCUMENTO_RELACIONADO}/{data_anterior_formatada}_ids_relacionados_lista_completa.xlsx'
     # Leitura do documento completo o caminho e la na pasta onde esta todos os arquivos completos
     df_atual = leitura_database(path_database=path_relacionado_do_dia)
 
     # Leitura do documento completo o caminho e la na pasta onde esta todos os arquivos completos
     df_dia_anterior = leitura_database(path_database=path_relacionado_do_dia_anterior)
 
-    # Caminho da pasta da rede para enviar o arquivo pra la
-    path_arquivo_comparativo_pasta_da_rede = f'Z:/SUPGESCO/1. ATUALIZAÇÕES/2. PROCESSO RELACIONADO/relacionados_comparativo_{data_atual_formatada} teste.xlsx'
-    # path_arquivo_comparativo = f'C:/Users/usuario/Desktop/workspace_patrick/02_pipeline_documentos_relacionados/data/arquivo_comparativo/{data_atual_formatada} relacionados comparativos teste.xlsx'
+    # # Caminho da pasta da rede para enviar o arquivo pra la
+    # path_arquivo_comparativo_pasta_da_rede = f'Z:/SUPGESCO/1. ATUALIZAÇÕES/2. PROCESSO RELACIONADO/relacionados_comparativo_{data_atual_formatada} teste.xlsx'
+    # # path_arquivo_comparativo = f'C:/Users/usuario/Desktop/workspace_patrick/02_pipeline_documentos_relacionados/data/arquivo_comparativo/{data_atual_formatada} relacionados comparativos teste.xlsx'
     
     # Coluna que vou comparar no merge
     coluna_analisada = 'ultimo documento'
 
     # Comparação dos arquivos completos do dia atual e do dia anteior
-    df_unificado = verificar_arquivo_atual_com_arquivo_anterior(df_dia_atual=df_atual, df_dia_anterior=df_dia_anterior, nome_da_coluna=coluna_analisada)
+    df_unificado = verificar_arquivo_atual_com_arquivo_anterior(df_atual, df_dia_anterior, coluna_analisada)
 
     # Caminho pasta atual do arquivo com o arquivo comparativo
-    path_database_documentos_relacionados_comparativo = rf'C:\Users\usuario\Desktop\workspace_patrick\02_pipeline_relacionado\database\database_documentos_relacionados\{data_atual_formatada}-comparativo_arquivos_relacionados.xlsx'
+    path_database_documentos_relacionados_comparativo = rf'{PATH_DATABASE_DOCUMENTOS_RELACIONADOS}\{data_atual_formatada}-comparativo_arquivos_relacionados.xlsx'
     exportar_arquivo(df=df_unificado, path_destino=path_database_documentos_relacionados_comparativo)
     
-    # Enviar o arquivo comparativo para a rede
-    path_arquivo_comparativo_pasta_da_rede = f'Z:/SUPGESCO/1. ATUALIZAÇÕES/2. PROCESSO RELACIONADO/{data_atual_formatada}-comparativo_arquivos_relacionados.xlsx'
-    exportar_arquivo(df=df_unificado, path_destino=path_arquivo_comparativo_pasta_da_rede)
+    # # Enviar o arquivo comparativo para a rede
+    # path_arquivo_comparativo_pasta_da_rede = f'Z:/SUPGESCO/1. ATUALIZAÇÕES/2. PROCESSO RELACIONADO/{data_atual_formatada}-comparativo_arquivos_relacionados.xlsx'
+    # exportar_arquivo(df=df_unificado, path_destino=path_arquivo_comparativo_pasta_da_rede)
 
 
     # path_relacionado_dia_anterior = f'C:/Users/usuario\Desktop/workspace_patrick/00-database/id_relacionado_documento/lista_completa/{data_anterior_formatada}_ids_relacionados_lista_completa.xlsx'

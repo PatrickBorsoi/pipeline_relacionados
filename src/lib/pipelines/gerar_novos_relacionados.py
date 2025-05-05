@@ -10,10 +10,13 @@ from lib.classes.generate_date import *
 from lib.classes.colettor_xml import *
 from lib.classes.commun_functions import *
 
-
-
 def pipeline_gerar_novos_arquivos_relacionados():
-    load_dotenv('.env')
+    PATH_ENV = r"C:\Users\usuario\Desktop\workspace\pipeline_relacionados\.env"
+    PATH_UNIDADES = r"C:\Users\usuario\Desktop\workspace\pipeline_relacionados\database\unidades_seiop.xlsx"
+    PATH_DATABASE_RELACIONADOS = r"C:\Users\usuario\Desktop\workspace\pipeline_relacionados\database\database_relacionado"
+    PATH_FILES_DB_FILES_RELACIONADOS = r"C:\Users\usuario\Desktop\workspace\db_files\table_files_relacionado\db_relacionados"
+    
+    load_dotenv(PATH_ENV)
 
     pasta_id = os.getenv('ID_PASTA')
     nome_arquivo = os.getenv('NOME_DO_ARQUIVO')
@@ -31,8 +34,7 @@ def pipeline_gerar_novos_arquivos_relacionados():
     df_database_principal = show_data(planilha=database_principal)
     df_database_principal_sem_fase_transferido = df_database_principal[df_database_principal[' FASE'] != 'TRANSFERIDO']
 
-    path_unidades = r'C:\Users\usuario\Desktop\workspace_patrick\02_pipeline_relacionado\database\unidades_seiop.xlsx'
-    unidades_seiop = pd.read_excel(path_unidades)
+    unidades_seiop = pd.read_excel(PATH_UNIDADES)
 
     lista_processo_mae: list = []
     lista_processo_relacionado:list = []
@@ -119,9 +121,6 @@ QTD de processos que não existe relacionado: {len(set(lista_que_nao_existe_rela
     }
     df_relacionados = pd.DataFrame(dicionario_gerar_novos_relacionados)
 
-    path_file_relacionado_database = 'C:/Users/usuario/Desktop/workspace/00-database/id_relacionado'
-    df_relacionados.to_excel(f'{path_file_relacionado_database}/01-database_relacionados_atual_teste.xlsx',index=False)
-    #
-    path_file_db_files = r'C:\Users\usuario\Desktop\workspace-patrick\db_files\table_files_relacionado\db_relacionados'
-    df_relacionados.to_excel(f'{path_file_db_files}/{data_atual_formatada}db_relacionados_atual.xlsx',index=False)
-    df_relacionados.to_excel(fr'C:\Users\usuario\Desktop\workspace_patrick\02_pipeline_relacionado\database\sem_unidade.xlsx',index=False)
+    df_relacionados.to_excel(f'{PATH_DATABASE_RELACIONADOS}/01-database_relacionados.xlsx',index=False)
+    
+    df_relacionados.to_excel(f'{PATH_FILES_DB_FILES_RELACIONADOS}/{data_atual_formatada}db_relacionados_atual.xlsx',index=False)

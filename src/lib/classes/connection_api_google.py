@@ -11,8 +11,9 @@ def connection_database_tabela_mae_google_sheets(
         nome_do_arquivo: str, 
         id_da_pasta:str
     ):
+    PATH_ENV = r"C:\Users\usuario\Desktop\workspace\pipeline_relacionados\.env"
 
-    load_dotenv('.env')
+    load_dotenv(PATH_ENV)
     path_credentials = os.getenv('path_cred')
 
     filename = path_credentials
@@ -79,7 +80,7 @@ def inserir_linhas_tabela_relacionada(numero_da_aba):
 
     show_data(aba_do_google_sheets)
     nome_do_arquivo = f'{dia_atual_formatado}_lista_completa_tabela_mae_transformado.xlsx'
-    path_database_documentos_relacionados_comparativo = rf'C:\Users\usuario\Desktop\workspace_patrick\02_pipeline_relacionado\database\database_documentos_relacionados\{dia_atual_formatado}-comparativo_arquivos_relacionados.xlsx'
+    path_database_documentos_relacionados_comparativo = rf'C:\Users\usuario\Desktop\workspace\pipeline_relacionados\database\database_documentos_relacionados\{dia_atual_formatado}-comparativo_arquivos_relacionados.xlsx'
     
     read_df_diario = pd.read_excel(path_database_documentos_relacionados_comparativo)
 
